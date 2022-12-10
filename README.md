@@ -88,3 +88,104 @@ int main()
 	return 0;
 }
 ```
+```
+#include <iostream>
+using namespace std;
+
+class Line {
+private:
+	int* ptr; // 선의 길이를 저장한다.
+public:
+	int getLength();
+	Line(int len);
+	Line(const Line& other); // 복사 생성자
+	~Line();
+};
+
+// 일반 생성자
+Line::Line(int len) {
+	cout << "일반 생성자" << endl;
+	ptr = new int;
+	*ptr = len;
+}
+
+// 복사 생성자
+Line::Line(const Line& other)
+{
+	cout << "복사 생성자" << endl;
+	this->ptr = new int;
+	*ptr = *other.ptr;
+}
+
+
+// default 소멸자
+Line::~Line() {
+	delete[] ptr;
+}
+
+// 선의 길이 접근자 함수 getLength
+int Line::getLength() {
+	return *ptr;
+}
+
+int main()
+{
+	Line line(10); // 일반 생성자 호출
+	Line clone1(line); // 복사 생성자 호출
+	Line clone2(clone1); // 복사 생성자 호출
+	cout << "선의 길이: " << clone2.getLength() << endl;
+	Line clone3(clone2); // 복사 생성자 호출
+	cout << "선의 길이: " << clone3.getLength() << endl; 
+
+	return 0;
+}
+```
+
+```
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class MyClass {
+private:
+	char* stored;
+public:
+	MyClass(const char* str); // 일반 생성자
+	MyClass(const MyClass& other); // 복사 생성자
+	~MyClass(); // 일반 소멸자
+	void print() {
+		cout << stored << endl;
+	}
+};
+
+// 일반 생성자
+MyClass::MyClass(const char* str) {
+	cout << "일반 생성자 테스트" << endl;
+	stored = new char[strlen(str) + 1];
+	strcpy(stored, str);
+}
+
+// 복사 생성자 정의
+MyClass::MyClass(const MyClass& other) {
+	cout << "복사 생성자 테스트" << endl;
+	this->stored = new char[strlen(other.stored) + 1];
+	strcpy(stored, other.stored);
+}
+
+// 일반 소멸자
+MyClass::~MyClass() {
+	delete[] stored;
+}
+
+int main()
+{
+	MyClass myclass("원치현"); // 일반 생성자 호출
+	MyClass clone(myclass); // 복사 생성자 호출
+
+	clone.print();
+
+
+	return 0;
+}
+
+```
