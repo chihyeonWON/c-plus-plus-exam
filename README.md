@@ -187,5 +187,312 @@ int main()
 
 	return 0;
 }
+```
 
+```
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class Point {
+private:
+	double xval, yval;
+public:
+	Point(double x = 0.0, double y = 0.0) {
+		xval = x;
+		yval = y;
+	}
+	double getX() { return xval; } // xval 접근자
+	double getY() { return yval; } // yval 접근자
+	void swap(Point &p1, Point &p2);
+	void print() {
+		cout << "(" << xval << "," << yval << ")" << endl;
+	}
+};
+
+// 두 개의 Point 객체를 교환하는 swap() 함수
+void Point::swap(Point& p1, Point& p2) {
+	Point temp;
+	temp = p1;
+	p1= p2;
+	p2= temp;
+}
+
+int main()
+{
+	Point p1(1.2, -2.8); // Point 객체 p1 생성
+	Point p2(3.4, 5.6); // Point 객체 p2 생성
+	swap(p1, p2); // Point p1와 p2를 서로 교환
+	p1.print(); // p1의 내용 출력 p1(3.4, 5.6)
+	p2.print(); // p2의 내용 출력 p2(1.2, -2.8)
+	return 0;
+}
+```
+
+```
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class Box {
+private:
+	double length;
+	double width;
+	double height;
+public:
+	static int count; // 정적 변수 count 선언
+	Box(double l = 2.0, double w = 2.0, double h = 2.0) {
+		length = l;
+		width = w;
+		height = h;
+		count++; // 객체가 생성될 때마다 count를 1증가
+	}
+	double Volume() {
+		return length * width * height;
+	}
+};
+
+int Box::count = 0;
+
+int main()
+{
+	Box box1(10, 20, 30); // box 객체 box1 생성
+	Box box2(40, 50, 60); // box 객체 box2 생성
+
+	cout << "전체 객체 수: " << Box::count << endl; // 생성된 객체 수를 출력
+
+	return 0;
+}
+```
+```
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Box {
+private:
+	double length;
+	double width;
+	double height;
+public:
+	Box(int l = 0, int w = 0, int h = 0) : length(l), width(w), height(h) { }
+	double getVolume(void)
+	{
+		return length * width * height;
+	}
+	// + 연산자에 대한 중복 정의
+	Box operator+(const Box& b2);
+	void print() {
+		cout << "상자의 길이: " << length << endl;
+		cout << "상자의 너비: " << width << endl;
+		cout << "상자의 높이: " << height << endl;
+		cout << "상자의 부피: " << getVolume() << endl;
+	}
+};
+
+Box Box::operator+(const Box& b2) {
+	Box b;
+	b.length = this->length + b2.length;
+	b.width = this->width + b2.width;
+	b.height = this->height + b2.height;
+	return b;
+}
+
+int main()
+{
+	Box a(10, 10, 10), b(20, 20, 20), c;
+
+	c = a + b;
+
+	cout << "상자 #1" << endl;
+	a.print();
+	cout << endl;
+
+	cout << "상자 #2" << endl;
+	b.print();
+	cout << endl;
+
+	cout << "상자 #3" << endl;
+	c.print();
+
+	return 0;
+}
+```
+```
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Box {
+private:
+	double length;
+	double width;
+	double height;
+	double volume = length * width * height;
+public:
+	Box(int l = 0, int w = 0, int h = 0) : length(l), width(w), height(h) { }
+	// + 연산자에 대한 중복 정의
+	Box operator+(const Box& b2);
+	// == 연산자에 대한 중복 정의
+	bool operator==(Box& b2) {
+		return this->volume == b2.volume;
+	};
+	// < 연산자에 대한 중복 정의
+	bool operator<(Box& b2) {
+		return this->volume < b2.volume;
+	}
+	friend void printBox(Box box);
+};
+
+void printBox(Box box) {
+	cout << "상자의 길이: " << box.length << endl;
+	cout << "상자의 너비: " << box.width << endl;
+	cout << "상자의 높이: " << box.height << endl;
+	cout << "상자의 부피: " << box.volume << endl;
+}
+
+Box Box::operator+(const Box& b2) {
+	Box b;
+	b.length = this->length + b2.length;
+	b.width = this->width + b2.width;
+	b.height = this->height + b2.height;
+	return b;
+}
+
+
+int main()
+{
+	Box a(10, 10, 10), b(20, 20, 20), c;
+
+	c = a + b;
+
+	cout << "상자 #1" << endl;
+	printBox(a);
+	cout << endl;
+
+	cout << "상자 #2" << endl;
+	printBox(b);
+	cout << endl;
+
+	cout << boolalpha;
+	cout << (a < b);
+
+
+	return 0;
+}
+
+프렌드 함수는 클래스 안에 있지만 안에있는게아닌 그니까 밖에다가 정의해야되고 정의할때도 클래스:: 안써줘도됌
+```
+
+```
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Shape {
+private:
+	int x; // x 위치
+	int y; // y 위치
+	string color; // 색상
+public:
+	// 생성자 정의
+	Shape(int x = 0, int y = 0, string color = "") {
+		this->x = x;
+		this->y = y;
+		this->color = color;
+	}
+	//x 멤버변수에 대한 접근자
+	int getX() { return x; }
+	//x 멤버변수에 대한 설정자
+	void setX(int x) { this->x = x; }
+	//y 멤버변수에 대한 접근자
+	int getY() { return y; }
+	//y 멤버변수에 대한 설정자
+	void setY(int y) { this->y = y; }
+
+	double getArea() {
+		return x * y;
+	}
+
+};
+
+class Circle : public Shape {
+private:
+	int radius;
+public:
+	Circle(int x = 0, int y = 0, string color = "", int radius = 0) : Shape(x, y, color) {
+		this->radius = radius;
+	}
+	double getArea() {
+		return 3.14 * radius * radius;
+	}
+};
+
+int main()
+{
+	Circle c(3, 4, "yellow", 4);
+
+	cout << "중심점 X가 " << c.getX() << "중심점 Y가 " << c.getY() << "인 원의 면적은" << c.getArea();
+
+	return 0;
+}
+```
+```
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Employee {
+private:
+	string name; // 이름
+	int salary; // 월급
+public:
+	// 생성자 정의
+	Employee(string name = "", int salary = 0) {
+		this->name = name;
+		this->salary = salary;
+	}
+	//name 멤버변수에 대한 접근자
+	string getName() { return name; }
+	//name 멤버변수에 대한 설정자
+	void setName(string n) { name = n; }
+	//salary 멤버변수에 대한 접근자
+	int getSalary() { return salary; }
+	//salary 멤버변수에 대한 설정자
+	void setSalary(int s) { salary = s; }
+	int computeSalary() { // 3-1 월급을 계산하는 멤버함수 computeSalary()
+		return salary;
+	}
+
+};
+
+class Manager : public Employee {
+private:
+	int bonus; // 보너스
+public:
+	// 생성자 정의
+	Manager(string name, int salary, int bonus) : Employee(name, salary) {
+		this->bonus = bonus;
+	}
+	// bonus 멤버 변수에 대한 접근자
+	int getBonus() { return bonus; }
+	// bonus 멤버 변수에 대한 설정자
+	void setBonus(int b) { bonus = b; }
+	// 3-2 부모 클래스의 computeSalary()를 재정의하여 (salary+bonus) 반환
+	int computeSalary() {
+		return getSalary() + bonus;
+	}
+};
+
+int main()
+{
+	Manager a("김철수", 200, 100);
+
+	cout << "이름: " << a.getName() << endl;
+	cout << "월급: " << a.getSalary() << endl;
+	cout << "보너스: " << a.getBonus() << endl;
+	cout << "전체 급여: " << a.computeSalary() << endl;
+
+	return 0;
+}
 ```
