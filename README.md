@@ -496,3 +496,42 @@ int main()
 	return 0;
 }
 ```
+```
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Weapon {
+public:
+	virtual void load() = 0;
+};
+
+class Bomb : public Weapon {
+public:
+	void load() {
+		cout << "나는 밤을 적재" << endl;
+	}
+};
+
+class Gun : public Weapon {
+	void load() {
+		cout << "나는 건을적재" << endl;
+	}
+};
+
+int main()
+{
+	Weapon* weapon = new Bomb[5];
+	weapon->load();
+	Weapon* weapon2 = new Gun[2];
+	weapon2->load();
+
+	return 0;
+}
+```
+```
+정리해보자면 소멸자도 부모에 가상소멸자안해주면 자식클래스소멸자 호출안됨 그래서
+부모클래스에 가상 소멸자를 만들어줘야 자식클래스가 소멸함
+
+
+```
